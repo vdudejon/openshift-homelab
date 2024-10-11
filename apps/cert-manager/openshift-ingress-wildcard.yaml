@@ -1,0 +1,32 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: router-certs-cloudflare
+  namespace: openshift-ingress
+  labels:
+    app: cert-manager
+spec:
+  secretName: router-certs-cloudflare
+  secretTemplate:
+    labels:
+      app: cert-manager
+  duration: 2160h # 90d
+  renewBefore: 720h # 30d
+  subject:
+    organizations:
+      - vDude Enterprises
+  commonName: '*.vdude.io'
+  privateKey:
+    algorithm: RSA
+    encoding: PKCS1
+    size: 2048
+    rotationPolicy: Always
+  usages:
+    - server auth
+    - client auth
+  dnsNames:
+    - '*.vdude.io'
+    - '*.apps.k8s.vdude.io'
+  issuerRef:
+    name: cloudflare-issuer
+    kind: ClusterIssuer
