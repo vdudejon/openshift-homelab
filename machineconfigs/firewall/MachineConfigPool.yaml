@@ -1,0 +1,11 @@
+apiVersion: machineconfiguration.openshift.io/v1
+kind: MachineConfigPool
+metadata:
+  name: host-firewall-rule-pool
+spec:
+  machineConfigSelector:
+    matchLabels:
+      machineconfiguration.openshift.io/role: host-firewall-rule
+  nodeSelector:
+    matchLabels:
+      host-firewall-rule: "true"

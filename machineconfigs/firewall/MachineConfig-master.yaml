@@ -1,0 +1,34 @@
+apiVersion: machineconfiguration.openshift.io/v1
+kind: MachineConfig
+metadata:
+  name: 99-master-iptables
+  labels:
+    machineconfiguration.openshift.io/role: master
+spec:
+  config:
+    ignition:
+      version: 3.2.0
+    storage:
+      files:
+      - path: /etc/iptables/allow_ssh.sh
+        mode: 0755
+        overwrite: true
+        contents:
+          source: 'data:text/plain;charset=utf-8;base64,IyEvYmluL2Jhc2gKaXB0YWJsZXMgLUEgSU5QVVQgLXAgdGNwIC1zIDEwLjEuMS4xMDYvMzIgLS1kcG9ydCAyMiAtaiBEUk9QCmlwdGFibGVzIC1BIElOUFVUIC1wIHRjcCAtcyAxMC4wLjAuMC84IC0tZHBvcnQgMjIgLWogQUNDRVBUICAgICAgICAgICAgCmlwdGFibGVzIC1BIElOUFVUIC1wIHRjcCAtLWRwb3J0IDIyIC1qIERST1A='
+    systemd:
+      units:
+      - name: iptables-allow-ssh.service
+        enabled: true
+        contents: |
+          [Unit]
+          Description=Custom iptables rules for SSH access
+          After=network-online.target
+          Wants=network-online.target
+
+          [Service]
+          Type=oneshot
+          ExecStart=/etc/iptables/allow_ssh.sh
+          RemainAfterExit=yes
+
+          [Install]
+          WantedBy=multi-user.target
