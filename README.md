@@ -1,5 +1,5 @@
 # openshift-homelab
-A repo for my OpemShift home lab
+A repo for my OpenShift home lab
 
 ## ArgoCD/Red Hat OpenShift GitOps
 1. Install Red Hat OpenShift GitOps from the operator hub
@@ -12,11 +12,10 @@ A repo for my OpemShift home lab
     namespace: openshift-gitops-operator
     # ...
     spec:
-    config:
+      config:
         env:
         - name: ARGOCD_CLUSTER_CONFIG_NAMESPACES
-        value: openshift-gitops
+          value: openshift-gitops
     # ...
     ```
-
-2. Log in and configure repo settings
+3. Restart the ArgoCD instance using `oc rollout restart deployment openshift-gitops-server -n openshift-gitops`
